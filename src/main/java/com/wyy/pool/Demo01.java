@@ -23,8 +23,8 @@ public class Demo01 {
         // 获取 CPU 的核数
         System.out.println(Runtime.getRuntime().availableProcessors());
 
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2,
-                5,
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,
+                3,
                 3,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(3),
@@ -35,10 +35,15 @@ public class Demo01 {
         for (int i = 0; i < 9; i++) {
             try {
                 threadPoolExecutor.execute(() -> {
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     System.out.println(Thread.currentThread() + "ok");
                 });
             } catch (RejectedExecutionException e) {
-                System.out.println(e.toString());
+                e.printStackTrace();
             }
         }
 
